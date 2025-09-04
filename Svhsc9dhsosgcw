@@ -1,0 +1,94 @@
+--// Hub Gratuito - TESTE GRATIS✔️ (Key: drap)
+local player = game.Players.LocalPlayer
+local KeyName = "drap"
+
+-- Criar UI
+local ScreenGui = Instance.new("ScreenGui", player.PlayerGui)
+local Frame = Instance.new("Frame", ScreenGui)
+local Title = Instance.new("TextLabel", Frame)
+local OpenHubBtn = Instance.new("TextButton", Frame)
+
+Frame.Size = UDim2.new(0, 320, 0, 150)
+Frame.Position = UDim2.new(0.5, -160, 0.5, -75)
+Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Frame.Active = true
+Frame.Draggable = true
+
+Title.Size = UDim2.new(1, 0, 0, 50)
+Title.BackgroundTransparency = 1
+Title.Text = "TESTE GRATIS✔️ | Key: "..KeyName
+Title.TextColor3 = Color3.fromRGB(255,255,255)
+Title.Font = Enum.Font.SourceSansBold
+Title.TextSize = 20
+
+OpenHubBtn.Size = UDim2.new(1, -20, 0, 40)
+OpenHubBtn.Position = UDim2.new(0, 10, 0, 70)
+OpenHubBtn.Text = "Abrir Hub"
+OpenHubBtn.BackgroundColor3 = Color3.fromRGB(0,150,0)
+OpenHubBtn.TextColor3 = Color3.fromRGB(255,255,255)
+
+-- Abrir hub
+OpenHubBtn.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+    loadHub()
+end)
+
+--// Hub Principal Simplificado
+function loadHub()
+    local HubGui = Instance.new("ScreenGui", player.PlayerGui)
+    local Frame = Instance.new("Frame", HubGui)
+    Frame.Size = UDim2.new(0, 220, 0, 200)
+    Frame.Position = UDim2.new(0, 20, 0.4, -100)
+    Frame.BackgroundColor3 = Color3.fromRGB(40,40,40)
+    Frame.Active = true
+    Frame.Draggable = true
+
+    -- Botão de Plataforma
+    local ativarBtn = Instance.new("TextButton", Frame)
+    ativarBtn.Size = UDim2.new(1, -20, 0, 40)
+    ativarBtn.Position = UDim2.new(0, 10, 0, 10)
+    ativarBtn.Text = "Ativar Plataforma"
+    ativarBtn.BackgroundColor3 = Color3.fromRGB(255,0,0)
+    ativarBtn.TextColor3 = Color3.fromRGB(255,255,255)
+
+    local desativarBtn = Instance.new("TextButton", Frame)
+    desativarBtn.Size = UDim2.new(1, -20, 0, 40)
+    desativarBtn.Position = UDim2.new(0, 10, 0, 60)
+    desativarBtn.Text = "Desativar Plataforma"
+    desativarBtn.BackgroundColor3 = Color3.fromRGB(100,0,0)
+    desativarBtn.TextColor3 = Color3.fromRGB(255,255,255)
+
+    -- Plataforma lógica
+    local platform = nil
+    local running = false
+    local heightOffset = 3
+
+    ativarBtn.MouseButton1Click:Connect(function()
+        if not platform then
+            platform = Instance.new("Part")
+            platform.Size = Vector3.new(10,1,10)
+            platform.Anchored = true
+            platform.Color = Color3.fromRGB(255,0,0)
+            platform.Parent = workspace
+
+            running = true
+            spawn(function()
+                while running and platform do
+                    local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+                    if hrp then
+                        platform.Position = hrp.Position - Vector3.new(0, heightOffset, 0)
+                    end
+                    task.wait(0.03)
+                end
+            end)
+        end
+    end)
+
+    desativarBtn.MouseButton1Click:Connect(function()
+        if platform then
+            running = false
+            platform:Destroy()
+            platform = nil
+        end
+    end)
+end
